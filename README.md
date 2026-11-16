@@ -1,20 +1,116 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Basket - .NET Web API
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## Introduction
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Basket is an ASP.NET Core Web API developed as part of a Multi-Repository architecture.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+The project demonstrates how an independent .NET application can consume reusable components distributed through a NuGet package hosted in Azure DevOps Artifacts.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Basket uses the Shared library to demonstrate centralized code reuse and package dependency management across independent repositories.
+
+## Project Architecture
+
+Basket is one of three independent application repositories in this project:
+
+| Repository | Responsibility |
+|---|---|
+| Shared | Reusable .NET Class Library |
+| Basket | Basket Web API |
+| Identity | Identity Web API |
+| Order | Order Web API |
+
+Each application has its own solution, source code, Git repository, and CI/CD pipeline.
+
+## Technologies Used
+
+- C#
+- .NET 10
+- ASP.NET Core Web API
+- NuGet Package Management
+- Azure DevOps Artifacts
+- Azure DevOps Classic Pipelines
+- Git and GitHub
+
+## Repository Structure
+
+```text
+Basket/
+│
+├── src/
+│   └── Basket/
+│       ├── Controllers/
+│       ├── Properties/
+│       ├── Basket.csproj
+│       ├── Basket.http
+│       ├── Program.cs
+│       ├── WeatherForecast.cs
+│       ├── appsettings.json
+│       └── appsettings.Development.json
+│
+├── .gitignore
+├── NuGet.Config
+├── README.md
+└── basket.slnx
+```
+
+## Shared NuGet Package Integration
+
+Basket consumes the Shared library as a NuGet dependency.
+
+Package reference:
+
+```xml
+<PackageReference Include="Shared" Version="1.0.0" />
+```
+
+The package is published to the Azure DevOps Artifacts feed named `Shared-Feed`.
+
+This approach allows Basket to consume reusable functionality without directly referencing another repository's source code.
+
+## Build and Run
+
+Restore dependencies:
+
+```bash
+dotnet restore basket.slnx
+```
+
+Build the solution:
+
+```bash
+dotnet build basket.slnx
+```
+
+Run the application:
+
+```bash
+dotnet run --project src/Basket/Basket.csproj
+```
+
+## CI/CD Pipeline
+
+The Basket repository is integrated with Azure DevOps Classic Pipelines.
+
+The pipeline includes the following stages:
+
+1. NuGet Restore
+2. Build
+3. Test
+4. Pack
+5. Push NuGet Package (where applicable)
+6. Publish Build Artifact
+
+The pipeline automates application validation and build artifact generation.
+
+## Project Objectives
+
+- Implement independent repository management.
+- Consume reusable NuGet packages.
+- Integrate Azure DevOps Artifacts with .NET applications.
+- Implement automated CI/CD workflows.
+- Demonstrate dependency management across multiple repositories.
+- Maintain independent application lifecycle and version control.
+
+---
+
+**Note:** This is a personal learning and demonstration project using sample configurations and data.
